@@ -1,0 +1,80 @@
+# Dependabot configuration for SecureVote
+# Keeps dependencies up-to-date automatically
+# Documentation: https://docs.github.com/en/code-security/dependabot
+
+version: 2
+updates:
+  # Python dependencies (Backend Flask)
+  - package-ecosystem: "pip"
+    directories:
+      - "/phase1/backend"
+      - "/phase2/backend"
+      - "/phase3/backend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "python"
+      - "security"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+
+  # Node.js dependencies (Frontend React)
+  - package-ecosystem: "npm"
+    directories:
+      - "/phase1/frontend"
+      - "/phase2/frontend"
+      - "/phase3/frontend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "javascript"
+      - "security"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+
+  # Docker images (all Dockerfiles)
+  - package-ecosystem: "docker"
+    directories:
+      - "/phase1/backend"
+      - "/phase1/frontend"
+      - "/phase2/backend"
+      - "/phase2/frontend"
+      - "/phase3/backend"
+      - "/phase3/frontend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "docker"
+      - "security"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+
+  # GitHub Actions (if we add workflows later)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
