@@ -41,8 +41,8 @@ services:
     depends_on:
       - database
       - cache
+    restart: on-failure:5  # Minimum pour que ça démarre (pas optimal!)
     # VULNÉRABILITÉ : Pas de limites de ressources !
-    # VULNÉRABILITÉ : Pas de restart policy !
     # VULNÉRABILITÉ : Pas de healthcheck !
 
   # Frontend React
@@ -70,6 +70,7 @@ services:
     depends_on:
       - frontend
       - backend
+    restart: on-failure:5  # Minimum pour que ça démarre (pas optimal!)
     # VULNÉRABILITÉ : Tourne en root !
     # VULNÉRABILITÉ : Image non scannée !
 
