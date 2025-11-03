@@ -1,5 +1,5 @@
 # VULNÉRABILITÉ : Image node complète (non slim/alpine)
-FROM node:20
+FROM node:25
 
 # VULNÉRABILITÉ : Pas d'utilisateur non-root, tout tourne en root !
 
