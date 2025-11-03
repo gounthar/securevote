@@ -44,6 +44,7 @@ services:
     depends_on:
       - database
       - cache
+    restart: on-failure:5  # Minimal restart policy pour gérer les race conditions
 
   # Frontend React optimisé
   frontend:
@@ -72,6 +73,7 @@ services:
     depends_on:
       - frontend
       - backend
+    restart: on-failure:5  # Minimal restart policy pour gérer les race conditions
 
 volumes:
   db_data:
