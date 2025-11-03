@@ -1,5 +1,5 @@
 # VULNÉRABILITÉ : Image full (non slim), beaucoup de vulnérabilités
-FROM python:3.11
+FROM python:3.14
 
 # VULNÉRABILITÉ : Pas d'utilisateur non-root, tout tourne en root !
 
