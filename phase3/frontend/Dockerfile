@@ -1,5 +1,5 @@
 # ✅ Build stage - Image complète pour la compilation
-FROM node:20-alpine AS builder
+FROM node:25-alpine AS builder
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ COPY . .
 RUN npm run build
 
 # ✅ Runtime stage - Image finale légère pour servir les fichiers
-FROM node:20-alpine
+FROM node:25-alpine
 
 # ✅ Créer un utilisateur non-root
 RUN addgroup -g 1001 -S reactuser && \
