@@ -67,6 +67,11 @@ updates:
         update-types:
           - "version-update:semver-major"
           - "version-update:semver-minor"
+      # The node major is moved by updatecli/updatecli.d/node.yaml, LTS
+      # only: Dependabot cannot tell an LTS from a Current release.
+      - dependency-name: "node"
+        update-types:
+          - "version-update:semver-major"
     labels:
       - "dependencies"
       - "docker"

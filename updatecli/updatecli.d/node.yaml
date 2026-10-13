@@ -1,0 +1,84 @@
+---
+name: Bumps the node images of the frontends to the latest LTS major
+
+# Dependabot ignores semver-major on node (.github/dependabot.yml): it
+# cannot tell an LTS from a Current release, and offered node 25 here.
+# This manifest moves the major instead, and only to an LTS. Same
+# approach as cours-devops-docker (updatecli/updatecli.d/node.yaml).
+# phase1 is left alone: it is the intentionally outdated version.
+
+scms:
+  default:
+    kind: github
+    spec:
+      user: "{{ .github.user }}"
+      email: "{{ .github.email }}"
+      owner: "{{ .github.owner }}"
+      repository: "{{ .github.repository }}"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      branch: "{{ .github.branch }}"
+
+sources:
+  nodeLatestLTSMajor:
+    name: Get the major of the latest Node.js LTS release
+    kind: json
+    spec:
+      file: https://nodejs.org/dist/index.json
+      key: .(lts!=false).version
+    transformers:
+      - findsubmatch:
+          pattern: '^v(\d+)\.'
+          captureindex: 1
+
+conditions:
+  # Forward only: until an even major turns LTS, the latest LTS can be
+  # older than the pin, and this pipeline would otherwise open a
+  # downgrade. Each Dockerfile has two FROM node lines (builder, runtime).
+  testLTSNotOlderThanPins:
+    name: "Test that the LTS major is not older than any pinned major"
+    kind: shell
+    disablesourceinput: true
+    scmid: default
+    spec:
+      command: >-
+        sh -c 'for m in $(sed -n "s/^FROM node:\([0-9]*\)-alpine.*/\1/p"
+        phase2/frontend/Dockerfile phase3/frontend/Dockerfile);
+        do test {{ source "nodeLatestLTSMajor" }} -ge "$m" || exit 1; done'
+  testNodeAlpineImagePublished:
+    name: "Test that the node:<lts_major>-alpine image tag exists"
+    kind: dockerimage
+    disablesourceinput: true
+    spec:
+      image: "node"
+      tag: '{{ source "nodeLatestLTSMajor" }}-alpine'
+
+targets:
+  updatePhase2Frontend:
+    name: "Update the node images of the phase2 frontend"
+    kind: file
+    sourceid: nodeLatestLTSMajor
+    scmid: default
+    spec:
+      file: phase2/frontend/Dockerfile
+      matchpattern: 'FROM node:\d+-alpine'
+      replacepattern: 'FROM node:{{ source "nodeLatestLTSMajor" }}-alpine'
+  updatePhase3Frontend:
+    name: "Update the node images of the phase3 frontend"
+    kind: file
+    sourceid: nodeLatestLTSMajor
+    scmid: default
+    spec:
+      file: phase3/frontend/Dockerfile
+      matchpattern: 'FROM node:\d+-alpine'
+      replacepattern: 'FROM node:{{ source "nodeLatestLTSMajor" }}-alpine'
+
+actions:
+  default:
+    kind: github/pullrequest
+    scmid: default
+    title: 'Bump the frontend node images to the {{ source "nodeLatestLTSMajor" }} LTS'
+    spec:
+      labels:
+        - dependencies
+        - javascript
