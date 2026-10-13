@@ -1,13 +1,13 @@
 # ✅ Build stage - Image complète pour la compilation
-FROM node:20-alpine AS builder
+FROM node:24-alpine AS builder
 
 WORKDIR /app
 
 # Copier les fichiers de dépendances
 COPY package*.json ./
 
-# ✅ Installer SEULEMENT les dépendances de production
-RUN npm install --production && npm cache clean --force
+# ✅ Installer TOUTES les dépendances (le build en a besoin ; pas de package-lock.json, donc pas de npm ci)
+RUN npm install --no-audit --no-fund && npm cache clean --force
 
 # Copier le code source
 COPY . .
@@ -16,7 +16,7 @@ COPY . .
 RUN npm run build
 
 # ✅ Runtime stage - Image finale légère pour servir les fichiers
-FROM node:20-alpine
+FROM node:24-alpine
 
 # ✅ Créer un utilisateur non-root
 RUN addgroup -g 1001 -S reactuser && \

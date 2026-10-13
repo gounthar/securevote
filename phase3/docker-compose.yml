@@ -106,13 +106,17 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    # ✅ Labels du service, recopiés dans les logs (option labels ci-dessous)
+    labels:
+      service: "backend"
+      env: "production"
     # ✅ Logs avec rotation et labels
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "3"
-        labels: "service=backend,env=production"
+        labels: "service,env"
 
   frontend:
     build:
@@ -120,7 +124,6 @@ services:
       dockerfile: Dockerfile
     container_name: securevote-frontend
     environment:
-      REACT_APP_API_URL: /api
       NODE_ENV: production
     networks:
       - frontend-network
@@ -145,13 +148,17 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
+    # ✅ Labels du service, recopiés dans les logs (option labels ci-dessous)
+    labels:
+      service: "frontend"
+      env: "production"
     # ✅ Logs avec rotation
     logging:
       driver: "json-file"
       options:
         max-size: "5m"
         max-file: "3"
-        labels: "service=frontend,env=production"
+        labels: "service,env"
 
   proxy:
     image: nginxinc/nginx-unprivileged:alpine
@@ -180,18 +187,22 @@ services:
     restart: unless-stopped
     # ✅ Healthcheck nginx
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8080/health"]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 10s
+    # ✅ Labels du service, recopiés dans les logs (option labels ci-dessous)
+    labels:
+      service: "proxy"
+      env: "production"
     # ✅ Logs avec rotation
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "5"
-        labels: "service=proxy,env=production"
+        labels: "service,env"
 
 volumes:
   db_data:
