@@ -59,6 +59,14 @@ updates:
       day: "monday"
       time: "09:00"
     open-pull-requests-limit: 10
+    ignore:
+      # The python minor (3.14 -> 3.15) is moved by
+      # updatecli/updatecli.d/python.yaml, which keeps each phase at a
+      # fixed distance from the latest release. Patch tags still come here.
+      - dependency-name: "python"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
     labels:
       - "dependencies"
       - "docker"
