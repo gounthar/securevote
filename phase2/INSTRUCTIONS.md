@@ -158,7 +158,7 @@ docker compose exec proxy whoami
 # Doit afficher : nginx (UID 101, pas root)
 
 # Vérifier les processus
-docker compose exec backend ps aux
+docker compose top backend
 # Aucun processus ne doit avoir UID 0
 ```
 
@@ -222,7 +222,7 @@ EOF
 
 ```bash
 git status
-# .env ne doit PAS apparaître dans les fichiers à commiter
+# .env ne doit PAS apparaître dans les fichiers à committer
 ```
 
 3. **Modifier docker-compose.yml**
@@ -281,7 +281,7 @@ cat docker-compose.yml | grep -i password
 - ✅ Application démarre et fonctionne
 
 ### Points clés
-- **JAMAIS** commiter de secrets dans Git
+- **JAMAIS** committer de secrets dans Git
 - Utiliser `.env.example` comme template sans valeurs sensibles
 - Documenter les secrets requis
 - Utiliser des générateurs de secrets forts
@@ -416,8 +416,8 @@ docker compose exec backend ping database
 
 ```bash
 # 1. Scanner les images
-docker scout cves securevote-backend:latest --only-severity critical
-docker scout cves securevote-frontend:latest --only-severity critical
+docker scout cves phase2-backend --only-severity critical
+docker scout cves phase2-frontend --only-severity critical
 
 # 2. Vérifier les utilisateurs
 docker compose exec backend whoami  # flaskuser
