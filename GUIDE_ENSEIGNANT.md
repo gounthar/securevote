@@ -115,7 +115,7 @@ Faire travailler les étudiants en binômes avec les questions :
 
 4. **Scanner les vulnérabilités** (5 min)
    ```bash
-   docker scout cves securevote-backend:latest --only-severity critical
+   docker scout cves phase2-backend --only-severity critical
    ```
    → Discussion : Combien de CVE critiques ? Pourquoi ?
 
@@ -153,7 +153,7 @@ Faire travailler les étudiants en binômes avec les questions :
 - Exemple de Dockerfile avec USER
 
 **9h55-10h00 : Gestion des secrets (5 min)**
-- Ne JAMAIS commiter de secrets
+- Ne JAMAIS committer de secrets
 - .env + .gitignore
 - Démonstration d'un leak de secrets sur GitHub (screenshot anonymisé)
 - Alternatives : Docker Secrets, Vault
@@ -187,7 +187,7 @@ Faire travailler les étudiants en binômes avec les questions :
 - Backend : `flaskuser`
 - Frontend : `reactuser`
 - Proxy : `nginxinc/nginx-unprivileged`
-- Vérification avec `whoami` et `ps aux`
+- Vérification avec `whoami` et `docker compose top`
 
 **Points de vigilance :**
 - Erreur courante : oublier `chown` des fichiers → permission denied
@@ -334,8 +334,8 @@ Si la session avance bien et qu'il reste du temps :
 
 2. Tagger et pousser les images
    ```bash
-   docker tag securevote-backend:latest localhost:5000/securevote-backend:1.0.0
-   docker push localhost:5000/securevote-backend:1.0.0
+   docker tag phase2-backend localhost:5050/securevote-backend:1.0.0
+   docker push localhost:5050/securevote-backend:1.0.0
    ```
 
 3. Modifier `docker-compose.yml` pour utiliser le registre local
@@ -449,20 +449,20 @@ Si la session avance bien et qu'il reste du temps :
 
 | Critère | Points | Validation |
 |---------|--------|------------|
-| **Sécurité (40 pts)** | |
+| **Sécurité (40 pts)** | | |
 | Images scannées et optimisées | 10 | < 10 CVE critical |
 | Utilisateurs non-root | 10 | Aucun process UID 0 |
 | Secrets protégés | 10 | .env + .gitignore OK |
 | Réseau isolé | 10 | Services cloisonnés |
-| **Production (40 pts)** | |
+| **Production (40 pts)** | | |
 | Limites de ressources | 10 | Toutes définies |
 | Restart policies | 10 | Appropriées |
 | Health checks | 10 | Tous fonctionnels |
 | Dépendances | 10 | Ordre correct |
-| **Fonctionnement (20 pts)** | |
+| **Fonctionnement (20 pts)** | | |
 | Application opérationnelle | 10 | Vote et résultats OK |
 | Résilience | 10 | Récupération après kill |
-| **Total** | 100 | |
+| **Total** | **100** | |
 
 ### Questions de validation orale
 

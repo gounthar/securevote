@@ -1,6 +1,9 @@
 # ✅ Image slim (beaucoup moins de vulnérabilités)
 FROM python:3.11-slim
 
+# ✅ Installer curl pour le healthcheck
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
+
 # ✅ Créer un utilisateur non-root
 RUN groupadd -r flaskuser && useradd -r -g flaskuser flaskuser
 
